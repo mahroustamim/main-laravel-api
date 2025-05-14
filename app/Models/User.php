@@ -67,4 +67,9 @@ class User extends Authenticatable implements MustVerifyEmail
                $this->otp_expires_at && 
                $this->otp_expires_at->isFuture();
     }
+
+    public function categoires()
+    {
+        return $this->hasMany(Category::class);
+    }
 }
