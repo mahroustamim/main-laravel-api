@@ -8,7 +8,7 @@ trait ResponseTrait
     {
         $response = [
             'success' => false,
-            'msg' => $msg,
+            'errors' => $msg,
         ];
         
         return response()->json($response, $code);

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LocalizatoinController;
 
 
 
@@ -22,4 +23,11 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/verify-password-reset-otp', [AuthController::class, 'verifyPasswordResetOtp']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('auth:sanctum');
 
+
+
+
+
+Route::get('/test', function () {
+    return app()->getLocale('');
+});
 
