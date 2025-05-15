@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $fillable = ['id'];
+    protected $fillable = ['id', 'category_id'];
 
     public function category()
     {
@@ -18,8 +18,8 @@ class Post extends Model
         return $this->hasMany(PostTranslation::class);
     }
 
-    public function translate($locale)
+    public function translation()
     {
-        return $this->translations->where('locale', $locale)->first();
+        return $this->hasOne(CategoryTranslation::class)->where('locale', app()->getLocale());
     }
 }

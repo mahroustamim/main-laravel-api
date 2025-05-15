@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('image');
             $table->string('locale', 10);
             $table->unsignedBigInteger('post_id');
-            $table->foreign('post_id')->references('id')->on('posts')->cascadeOnUpdate();
-            $table->timestamps();
+            $table->foreign('post_id')->references('id')->on('posts')->cascadeOnDelete();
             $table->timestamps();
         });
     }
