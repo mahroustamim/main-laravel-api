@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_translation', function (Blueprint $table) {
+        Schema::create('post_translations', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->string('image');
             $table->string('locale', 10);
             $table->unsignedBigInteger('post_id');
             $table->foreign('post_id')->references('id')->on('posts')->cascadeOnDelete();
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_translation');
+        Schema::dropIfExists('post_translations');
     }
 };

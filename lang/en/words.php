@@ -6,4 +6,8 @@ return [
     'update_success' => 'Updated Successfully',
     'locale' => 'Category Locale',
     "category_name" => 'Category Name',
+    'title' => 'Title',
+    'content' => 'Content',
+    'image' => 'Image',
+    'not_found' => 'Not Found',
 ];

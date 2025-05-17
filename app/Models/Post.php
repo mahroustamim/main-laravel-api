@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $fillable = ['id', 'category_id'];
+    protected $fillable = ['id', 'category_id', 'image'];
 
     public function category()
     {
-        return $this->hasOne(Category::class);
+        return $this->belongsTo(Category::class);
     } 
     
     public function translations()
@@ -20,6 +20,6 @@ class Post extends Model
 
     public function translation()
     {
-        return $this->hasOne(CategoryTranslation::class)->where('locale', app()->getLocale());
+        return $this->hasOne(PostTranslation::class)->where('locale', app()->getLocale());
     }
 }
