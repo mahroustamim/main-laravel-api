@@ -10,4 +10,5 @@ return [
     'content' => 'Content',
     'image' => 'Image',
     'not_found' => 'Not Found',
+    'Unauthorized' => 'You are not authorized to perform this action.',
 ];
