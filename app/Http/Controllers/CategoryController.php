@@ -7,6 +7,7 @@ use App\Models\CategoryTranslation;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
@@ -26,6 +27,10 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        if (Gate::denies('is_user')) {
+            return $this->returnError(__('words.Unauthorized'), 403);
+        }
+        
         //validate request
         $validator = Validator::make($request->all(), [
             'translations.*.name' => 'required|string',
@@ -69,6 +74,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return $this->returnError(__('words.not_found'), 404);
+        }
+        
+        if (Gate::denies('update',  $category)) {
+            return $this->returnError(__('words.Unauthorized'), 403);
+        }
+
         //validate request
         $validator = Validator::make($request->all(), [
             'translations.*.name' => 'required|string',
@@ -108,7 +123,17 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        Category::find($id)->delete();
+        $category = Category::find($id);
+
+        if (!$category) {
+            return $this->returnError(__('words.not_found'), 404);
+        }
+
+        if (Gate::denies('delete',  $category)) {
+            return $this->returnError(__('words.Unauthorized'), 403);
+        }
+
+        $category->delete();
         return $this->returnSuccess(__('words.delete_success'));
     }
 }

@@ -7,6 +7,7 @@ use App\Models\PostTranslation;
 use App\Traits\ResponseTrait;
 use App\Traits\UploadImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -27,6 +28,10 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        if (Gate::denies('is_user')) {
+            return $this->returnError(__('words.Unauthorized'), 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'category' => 'required|exists:categories,id',
             'image' => 'required|file|max:1000|mimes:jpg,png',
@@ -94,6 +99,10 @@ class PostController extends Controller
             return $this->returnError(__('words.not_found'), 404);
         }
 
+        if (Gate::denies('update',  $post)) {
+            return $this->returnError(__('words.Unauthorized'), 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'category' => 'sometimes|exists:categories,id',
             'image' => 'sometimes|file|max:1000|mimes:jpg,png',
@@ -144,9 +153,13 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         $post = Post::find($id);
-
+        
         if (!$post) {
             return $this->returnError(__('words.not_found'), 404);
+        }
+
+        if (Gate::denies('delete',  $post)) {
+            return $this->returnError(__('words.Unauthorized'), 403);
         }
 
         // Delete image from public
