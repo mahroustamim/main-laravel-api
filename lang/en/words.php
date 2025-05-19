@@ -2,6 +2,7 @@
 
 return [
     'store_success' => 'Created Successfully',
+    'save_success' => 'Save Successfully',
     'delete_success' => 'Deleted Successfully',
     'update_success' => 'Updated Successfully',
     'locale' => 'Category Locale',

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LocalizatoinController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', [AuthController::class, 'getAllUsers']);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('posts', PostController::class);
+    Route::post('settings', [SettingController::class, 'store']);
 });
 
 // Password reset routes
