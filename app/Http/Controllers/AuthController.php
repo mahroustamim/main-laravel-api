@@ -36,7 +36,7 @@ class AuthController extends Controller
 
         // generate ans send otp
         $otp = $user->generateOtp();
-        Mail::to($user->email)->send(new SendOtp($otp));
+        // Mail::to($user->email)->send(new SendOtp($otp));
 
         // return response
         return $this->returnSuccess('User registered successfully. OTP sent to email.');
@@ -82,11 +82,11 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if(!$user->hasValidOtp()) {
-            return $this->returnError('OTP expired or not generated.', 400);
+            return $this->returnError(['otp' => ['OTP expired or not generated.']], 400);
         }
 
         if ($request->otp !== $user->otp) {
-            return $this->returnError('Invalid OTP', 401);
+            return $this->returnError(['otp' => ['Invalid OTP.']], 401);
         }
 
         // Mark email as verified
@@ -95,13 +95,19 @@ class AuthController extends Controller
         $user->otp_expires_at = null;
         $user->save();
 
-        return $this->returnSuccess('Email verified successfully.');
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // return $this->returnSuccess('Email verified successfully.');
+        return $this->returnData([
+            'user' => $user,
+            'token' => $token,
+        ], 'Email verified successfully');
     }
 
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required|email|exists:users,email',
             'password' => 'required',
         ]);
 
@@ -110,13 +116,13 @@ class AuthController extends Controller
         }
 
         if (!Auth::attempt($request->only('email', 'password'))) {
-            return $this->returnError('Invalid credentials.', 401);
+            return $this->returnError(['password' => ['Invalid credentials.']], 401);
         }
 
         $user = User::where('email', $request->email)->first();
 
         if (!$user->email_verified_at) {
-            return $this->returnError('Email not verified. Please verify your email first.', 403);
+            return $this->returnError(['password' => ['Email not verified. Please verify your email first.']], 401);
         }
 
         // Determine token expiration based on remember_me
@@ -217,7 +223,7 @@ class AuthController extends Controller
 
     public function getUser(Request $request)
     {
-        return $this->returnData($request->user(), 'User retrieved successfully.');
+        return $this->returnData(['user' => $request->user()], 'User retrieved successfully.');
     }
 
     public function getAllUsers(Request $request)
