@@ -82,11 +82,11 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if(!$user->hasValidOtp()) {
-            return $this->returnError(['otp' => ['OTP expired or not generated.']], 400);
+            return $this->returnError(['otp' => [__('words.otp_expired')]], 400);
         }
 
         if ($request->otp !== $user->otp) {
-            return $this->returnError(['otp' => ['Invalid OTP.']], 401);
+            return $this->returnError(['otp' => [__('words.otp_invalid')]], 401);
         }
 
         // Mark email as verified
@@ -122,7 +122,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user->email_verified_at) {
-            return $this->returnError(['password' => ['Email not verified. Please verify your email first.']], 401);
+            return $this->returnError(['password' => [__('words.email_not_verified')]], 401);
         }
 
         // Determine token expiration based on remember_me
@@ -163,7 +163,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user->hasValidOtp()) {
-            return $this->returnError('An active OTP already exists. Please wait or request a new one after expiration.');
+            return $this->returnError(__('words.otp_exists'));
         }
 
         $otp = $user->generateOtp();
@@ -186,11 +186,11 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user->hasValidOtp()) {
-            return $this->returnError('OTP expired or not generated.', 400);
+            return $this->returnError(['otp' => [__('words.otp_expired')]], 400);
         }
 
         if ($user->otp != $request->otp) {
-            return $this->returnError('Invalid OTP.', 400);
+            return $this->returnError(['otp' => [__('words.otp_invalid')]], 400);
         }
 
         // Generate a temporary token for password reset

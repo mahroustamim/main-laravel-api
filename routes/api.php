@@ -32,11 +32,13 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/verify-password-reset-otp', [AuthController::class, 'verifyPasswordResetOtp']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('auth:sanctum');
 
+Route::POST('/set-locale', [LocalizatoinController::class,'setLocale']);
+
 
 
 
 
 Route::get('/test', function () {
-    return app()->getLocale('');
+    return app()->getLocale();
 });
 

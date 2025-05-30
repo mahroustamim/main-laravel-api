@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Middleware\LocaleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,7 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->prepend('\Illuminate\Session\Middleware\StartSession::class');
+        $middleware->append(LocaleMiddleware::class);
+        $middleware->alias([
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
