@@ -57,7 +57,7 @@ class AuthController extends Controller
 
         // check if user has otp
         if($user->hasValidOtp()) {
-            return $this->returnError('An active OTP already exists. Please wait or request a new one after expiration.');
+            return $this->returnError(['otp' => __('words.otp_exists')]);
         }
 
         // generate ans send otp
@@ -163,7 +163,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user->hasValidOtp()) {
-            return $this->returnError(__('words.otp_exists'));
+            return $this->returnError(['otp' => __('words.otp_exists')]);
         }
 
         $otp = $user->generateOtp();

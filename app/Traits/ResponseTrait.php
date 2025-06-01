@@ -4,11 +4,11 @@ namespace App\Traits;
 
 trait ResponseTrait
 {
-    public function returnError($msg, $code = 404) 
+    public function returnError($errors, $code = 404) 
     {
         $response = [
             'success' => false,
-            'errors' => $msg,
+            'errors' => $errors,
         ];
         
         return response()->json($response, $code);
